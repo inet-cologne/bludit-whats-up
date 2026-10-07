@@ -2,9 +2,9 @@
     "author": "Joaquim Homrighausen",
     "email": "joho@webbplatsen.se",
     "website": "https://webbplatsen.se",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "releaseDate": "2026-10-07",
     "license": "AGPLv3",
     "compatible": "3.16,3.16.1,3.16.2,3.15,3.15.0,3.15.1,3.15.2,3.15.3,3.22",
-    "notes": "Display calendar events as an agenda using a shortcode or in the sidebar. v1.0.1: replaced the Composer vendor/autoload dependency with a bundled, dependency-free PSR-4 autoloader for the already-vendored sabre/vobject, sabre/xml and sabre/uri sources, so the plugin works immediately after copying the folder (no 'composer install' step required)."
+    "notes": "Display calendar events as an agenda using a shortcode or in the sidebar. v1.0.1: replaced the Composer vendor/autoload dependency with a bundled, dependency-free PSR-4 autoloader for the already-vendored sabre/vobject, sabre/xml and sabre/uri sources, so the plugin works immediately after copying the folder (no 'composer install' step required). v1.0.2: fixed the day-bucket window in setupICS() being hard-capped at 60 days regardless of the configured Past days/Future days settings, which silently dropped future events whenever Past days + Future days exceeded 60 (e.g. a 60-past/90-future window as commonly used with a remote CalDAV/Nextcloud .ics source)."
 }
