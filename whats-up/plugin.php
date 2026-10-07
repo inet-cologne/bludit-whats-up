@@ -419,7 +419,7 @@ class WhatsUp extends Plugin {
         }
         if ( $this->checkStatus() ) {
             if ( $this->getICS() ) {
-                include dirname(__FILE__) . '/externals/vendor/autoload.php';
+                include dirname(__FILE__) . '/externals/autoload.php';
                 // Setup baseline
                 $this->agenda_our_timezone = date_default_timezone_get();
                 $this->agenda_right_now = new DateTimeImmutable( 'now', new DateTimeZone( $this->agenda_our_timezone ) );
