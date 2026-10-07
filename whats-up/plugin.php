@@ -159,7 +159,7 @@ class WhatsUp extends Plugin {
             foreach( $this->agenda_our_events as $k => $v ) {
                 if ( ! empty( $v ) ) {
                     // One or more events exist for this day
-                    $html .= $this->agendaDayOpen( ( $k == $today ), $v[0][6], $v[0][7], $v[0][4], $v[0][9] );
+                    $html .= $this->agendaDayOpen( ( $k == $today ), $v[0][6], $v[0][7], $v[0][4], $v[0][9], $this->agendaDayTimeClass( $k, $today ) );
                     if ( count( $v ) > 1 ) {
                         uasort( $v, [$this, 'sortTimes' ] );
                     }
@@ -342,7 +342,7 @@ class WhatsUp extends Plugin {
                     foreach( $this->agenda_our_events as $k => $v ) {
                         if ( ! empty( $v ) ) {
                             // One or more events exist for this day
-                            $html .= $this->agendaDayOpen( ( $k == $today ), $v[0][6], $v[0][7], $v[0][4], $v[0][9] );
+                            $html .= $this->agendaDayOpen( ( $k == $today ), $v[0][6], $v[0][7], $v[0][4], $v[0][9], $this->agendaDayTimeClass( $k, $today ) );
                             if ( count( $v ) > 1 ) {
                                 uasort( $v, [$this, 'sortTimes' ] );
                             }
@@ -406,6 +406,18 @@ class WhatsUp extends Plugin {
             return( -1 );
         }
         return( 1 );
+    }
+    // Determine the CSS class ("whatsup-day-past", "whatsup-day-today" or
+    // "whatsup-day-future") for a given day bucket key ($dayKey, format Ymd)
+    // relative to today's date ($todayKey, format Ymd), so that past, current
+    // and future days can be styled independently via custom CSS.
+    protected function agendaDayTimeClass( $dayKey, $todayKey ) {
+        if ( $dayKey == $todayKey ) {
+            return( 'whatsup-day-today' );
+        } elseif ( $dayKey < $todayKey ) {
+            return( 'whatsup-day-past' );
+        }
+        return( 'whatsup-day-future' );
     }
     // Setup ICS data
     protected function setupICS() {
@@ -710,10 +722,14 @@ class WhatsUp extends Plugin {
         }
         return( $html );
     }
-    protected function agendaDayOpen( $today, $day_num, $month_name, $day_name, $year_number = '' ) {
+    protected function agendaDayOpen( $today, $day_num, $month_name, $day_name, $year_number = '', $timeClass = '' ) {
         global $L;
 
-        $html = '<div class="whatsup-day">';
+        $html = '<div class="whatsup-day';
+        if ( ! empty( $timeClass ) ) {
+            $html .= ' ' . $timeClass;
+        }
+        $html .= '">';
         if ( defined( 'WHATSUP_PLUGIN_DEBUG' ) && WHATSUP_PLUGIN_DEBUG ) {
             $html .= "\n";
         }
@@ -947,7 +963,7 @@ class WhatsUp extends Plugin {
             foreach( $this->agenda_our_events as $k => $v ) {
                 if ( ! empty( $v ) ) {
                     // One or more events exist for this day
-                    $html .= $this->agendaDayOpen( ( $k == $today ), $v[0][6], $v[0][7], $v[0][4], $v[0][9] );
+                    $html .= $this->agendaDayOpen( ( $k == $today ), $v[0][6], $v[0][7], $v[0][4], $v[0][9], $this->agendaDayTimeClass( $k, $today ) );
                     if ( count( $v ) > 1 ) {
                         uasort( $v, [$this, 'sortTimes' ] );
                     }
