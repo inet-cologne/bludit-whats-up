@@ -479,7 +479,15 @@ class WhatsUp extends Plugin {
                     $this->agenda_events_of_interest[] = $vevent;
                 }// foreach
                 // Prepare our "days" array as array keys
-                $events = new DatePeriod( $this->agenda_time_begin, new DateInterval( 'P1D' ), 60 );
+                // NOTE: The number of recurrences must span the full configured window
+                // (past + future days), not a fixed value. A fixed value smaller than
+                // the configured window silently truncates the day-bucket array, which
+                // then causes events beyond that fixed cut-off to be dropped further
+                // below (the `isset( $this->agenda_our_events[$dstart] )` check), even
+                // though they were correctly fetched and are within the actual
+                // agenda_time_begin/agenda_time_end window.
+                $daySpan = (int)$this->getPastAgendaDays() + (int)$this->getFutureAgendaDays();
+                $events = new DatePeriod( $this->agenda_time_begin, new DateInterval( 'P1D' ), $daySpan );
                 if ( method_exists( $events, 'getIterator' ) ) {
                     // PHP 8.x+
                     $event_iterator = $events->getIterator();
