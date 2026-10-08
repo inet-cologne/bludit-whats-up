@@ -1,5 +1,13 @@
 [![Software License](https://img.shields.io/badge/License-AGPLv3-green.svg?style=flat-square)](LICENSE) [![Bludit 3.15.x](https://img.shields.io/badge/Bludit-3.15.x-blue.svg?style=flat-square)](https://bludit.com) [![Bludit 3.16.x](https://img.shields.io/badge/Bludit-3.16.x-blue.svg?style=flat-square)](https://bludit.com)
 
+> **Fork notice (inet-cologne, branch `fix/composer-free-autoload`):** This fork contains a few fixes and additions on top of the original 1.0.0 release, intended to be upstreamed via pull request:
+> - **Composer dependency fix:** replaced the `externals/vendor/autoload.php` requirement (which needed a manual `composer install` that the original repo doesn't actually support out of the box) with a small, dependency-free PSR-4 autoloader (`externals/autoload.php`) for the already-vendored sabre/vobject, sabre/xml and sabre/uri sources. The plugin now works immediately after copying the folder, with no build/install step.
+> - **Event window bugfix:** the day-bucket window in `setupICS()` was hard-capped at 60 days regardless of the configured "Past days"/"Future days" settings, silently dropping future events whenever Past + Future exceeded 60 days (e.g. a 60-past/90-future window, as commonly used with a remote CalDAV/Nextcloud `.ics` source). Now sized dynamically from the actual settings.
+> - **Extended styling features:** each `div.whatsup-day` block now additionally receives a `whatsup-day-past`, `whatsup-day-today` or `whatsup-day-future` class depending on its relation to the current date, so past/current/future days can be styled independently via custom CSS.
+> - etc. — see the [Changelog](#changelog) below for the full, versioned list of changes.
+>
+> See [github.com/inet-cologne/bludit-whats-up](https://github.com/inet-cologne/bludit-whats-up) for the fork and its commit history.
+
 # What's Up (whats-up) plugin for Bludit
 
 This is a calendar agenda display plugin for Bludit 3.15.x and 3.16.x. Later 3.x versions may work.
@@ -83,6 +91,15 @@ The plugin has been localized to Swedish and English. If you want to add a trans
 * [Are We Open](https://github.com/joho1968/bludit-areweopen), display availability and/or business operating open/closed notice
 
 ## Changelog
+
+### 1.1.0 (2026-10-07)
+* Each `div.whatsup-day` block now additionally receives a `whatsup-day-past`, `whatsup-day-today` or `whatsup-day-future` class depending on its relation to the current date, so past/current/future days can be styled independently via custom CSS. Applies to all three rendering paths (shortcode, sidebar, settings-page preview).
+
+### 1.0.2 (2026-10-07)
+* Fixed the day-bucket window in `setupICS()` being hard-capped at 60 days regardless of the configured "Past days"/"Future days" settings, which silently dropped future events whenever Past days + Future days exceeded 60 (e.g. a 60-past/90-future window, as commonly used with a remote CalDAV/Nextcloud `.ics` source).
+
+### 1.0.1 (2026-10-07)
+* Replaced the Composer `vendor/autoload.php` dependency with a bundled, dependency-free PSR-4 autoloader for the already-vendored sabre/vobject, sabre/xml and sabre/uri sources, so the plugin works immediately after copying the folder (no `composer install` step required).
 
 ### 1.0.0 (2024-11-13)
 * Initial release
